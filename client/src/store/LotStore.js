@@ -3,8 +3,9 @@ import {makeAutoObservable} from "mobx";
 export default class LotStore {
     constructor() {
         this._types = [
-            {id: 1, name: 'Рисунок'},
-            {id: 2, name: 'Живопись'}
+            {id: 1, name: 'Графика'},
+            {id: 2, name: 'Живопись'},
+            {id: 5, name: 'Скульптура'}
         ]
         this._lots = [
             {id: 1, name: 'Утро в сосновом лесу', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Shishkin%2C_Ivan_-_Morning_in_a_Pine_Forest.jpg/1280px-Shishkin%2C_Ivan_-_Morning_in_a_Pine_Forest.jpg', typeId: '2'},
@@ -15,6 +16,7 @@ export default class LotStore {
             {id: 6, name: 'Апофеоз войны', img: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Apotheosis.jpg', typeId: '2'},
             {id: 7, name: 'Сикстинская мадонна', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/RAFAEL_-_Madonna_Sixtina_%28Gem%C3%A4ldegalerie_Alter_Meister%2C_Dresden%2C_1513-14._%C3%93leo_sobre_lienzo%2C_265_x_196_cm%29FXD.jpg/800px-RAFAEL_-_Madonna_Sixtina_%28Gem%C3%A4ldegalerie_Alter_Meister%2C_Dresden%2C_1513-14._%C3%93leo_sobre_lienzo%2C_265_x_196_cm%29FXD.jpg', typeId: '2'},
         ]
+        this._selectedType = {}
         makeAutoObservable(this)
     }
 
@@ -26,11 +28,18 @@ export default class LotStore {
         this._lots = lots
     }
 
+    setSelectedType(type) {
+        this._selectedType = type
+    }
+
     get types() {
         return this._types
     }
 
     get lots() {
         return this._lots
+    }
+    get selectedType() {
+        return this._selectedType
     }
 }
