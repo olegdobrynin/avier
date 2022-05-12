@@ -1,12 +1,35 @@
-import React from 'react'
+import { observer } from 'mobx-react-lite'
+import React , { useContext, useState } from 'react'
 import { Button, Card, Container, Form } from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
-import { LOGIN_ROUTE } from '../utils/consts'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Context } from '..'
+import { auth, registration } from '../http/userAPI'
+import { LOGIN_ROUTE, MAIN_ROUTE } from '../utils/consts'
 
-export default function Auth() {
+export default observer( function Auth() {
+    const {user} = useContext(Context)
     const location = useLocation()
+    const navigate = useNavigate()
     const isLogin = location.pathname === LOGIN_ROUTE
+    const [login, setLogin] = useState('')
+    const [password, setPassword] = useState('')
 
+    const click = async () => {
+        try {
+            let data;
+            if (isLogin) {
+                data = await auth(login, password);
+            } else {
+                data = await registration(login, password);
+            }
+            user.setUser(user)
+            user.setIsAuth(true)
+            navigate(MAIN_ROUTE)
+        } catch (e) {
+            alert(e.response.data.message)
+        }
+        
+    }
 
   return (
     <Container 
@@ -16,19 +39,19 @@ export default function Auth() {
             <Form className='d-flex flex-column'>
                 <Form.Group className="mb-3" controlId="login">
                     <Form.Label>Логин</Form.Label>
-                    <Form.Control type="login" placeholder="Введите логин.." />
+                    <Form.Control type="login" placeholder="Введите логин.." value={login} onChange={e => setLogin(e.target.value)}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="password">
                     <Form.Label>Пароль</Form.Label>
-                    <Form.Control type="password" placeholder="Введите пароль.." />
+                    <Form.Control type="password" placeholder="Введите пароль.." value={password} onChange={e => setPassword(e.target.value)}/>
                 </Form.Group>
                 
-                <Button className='mt-3' variant={'primary'}>
+                <Button className='mt-3' variant={'primary'} onClick={click}>
                     {isLogin ? 'Войти' : 'Зарегистрироваться'}
                 </Button>
             </Form>
         </Card>
     </Container>
   )
-}
+})
