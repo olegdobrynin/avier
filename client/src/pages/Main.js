@@ -1,13 +1,13 @@
 import React from 'react'
 import {Container} from 'react-bootstrap';
-import LotList from '../components/LotList';
+import ArtList from '../components/ArtList';
 import TypeBar from '../components/TypeBar';
 
 const Main = () => {
     return (
         <Container>
             <TypeBar />
-            <LotList/>
+            <ArtList/>
         </Container>
     );
 };
