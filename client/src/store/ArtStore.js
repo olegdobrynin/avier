@@ -2,11 +2,7 @@ import {makeAutoObservable} from "mobx";
 
 export default class ArtStore {
     constructor() {
-        this._types = [
-            {id: 1, name: 'Графика'},
-            {id: 2, name: 'Живопись'},
-            {id: 5, name: 'Скульптура'}
-        ]
+        this._types = []
         this._arts = [
             {id: 1, name: 'Утро в сосновом лесу', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Shishkin%2C_Ivan_-_Morning_in_a_Pine_Forest.jpg/1280px-Shishkin%2C_Ivan_-_Morning_in_a_Pine_Forest.jpg', typeId: '2'},
             {id: 2, name: 'Мона Лиза', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg', typeId: '2'},
