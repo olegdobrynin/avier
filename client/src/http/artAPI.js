@@ -1,4 +1,3 @@
-import jwt_decode from "jwt-decode"
 import { $authHost, $host } from "./index"
 
 export const createType = async (type) => {
@@ -13,5 +12,26 @@ export const deleteType = async (type) => {
 
 export const fetchTypes = async () => {
     const {data} = await $host.get('api/type')
+    return data
+}
+
+
+export const createArt = async (art) => {
+    const {data} = await $authHost.post('api/art', art)
+    return data
+}
+
+export const deleteArt = async (art) => {
+    const {data} = await $authHost.post('api/art', art)
+    return data
+}
+
+export const fetchArts = async () => {
+    const {data} = await $host.get('api/art')
+    return data
+}
+
+export const fetchOneArt = async (id) => {
+    const {data} = await $host.get('api/art/' + id)
     return data
 }

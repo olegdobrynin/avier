@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Container, Image, Row } from 'react-bootstrap'
+import { useParams } from 'react-router-dom'
+import { fetchOneArt } from '../http/artAPI'
 
 export default function ArtPage() {
-    const art =  {id: 1, name: 'Утро в сосновом лесу', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Shishkin%2C_Ivan_-_Morning_in_a_Pine_Forest.jpg/1280px-Shishkin%2C_Ivan_-_Morning_in_a_Pine_Forest.jpg', typeId: '2'}
-    
+    const [art, setArt] = useState({info: []})
+    const {id} = useParams()
+    useEffect(() => {
+        fetchOneArt(id).then(data => setArt(data))
+    })
   return (
     <Container>
         <Row>
             <Col md={8}>
-                <Image className="w-100" src={art.img}/>     
+                <Image className="w-100" src={process.env.REACT_APP_API_URL + art.img}/>     
             </Col>
             <Col md={4}>
                 <Row><h2>{art.name}</h2></Row>    
