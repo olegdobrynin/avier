@@ -19,7 +19,7 @@ const NavBar = observer( () => {
   return (
     <Navbar bg="light" variant="light" >
     <Container>
-    <Navbar.Brand href={MAIN_ROUTE}>
+    <Navbar.Brand onClick={() => navigate(MAIN_ROUTE)}>
     <img
         src="/logo330x100.png"
         width="132"
