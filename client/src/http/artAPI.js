@@ -31,6 +31,11 @@ export const fetchArts = async () => {
     return data
 }
 
+export const fetchArtists = async () => {
+    const {data} = await $host.get('api/artist')
+    return data
+}
+
 export const fetchOneArt = async (id) => {
     const {data} = await $host.get('api/art/' + id)
     return data

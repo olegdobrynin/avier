@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
+import { Context } from '..'
 import CreateArt from '../components/modals/CreateArt'
+import CreateArtist from '../components/modals/CreateArtist'
+
 
 export default function Admin() {
   const [artVisible, setArtVisible] = useState(false)
   const [artistVisible, setArtistVisible] = useState(false)
+  const {art} = useContext(Context)
+
+ 
   return (
     <Container
     className='d-flex justify-content-center align-item-center py-5'
@@ -17,7 +23,7 @@ export default function Admin() {
     Добавить художника
   </Button>
   <CreateArt show={artVisible} onHide={() => setArtVisible(false)}/>
-  <CreateArt show={artistVisible} onHide={() => setArtistVisible(false)}/>
+  <CreateArtist show={artistVisible} onHide={() => setArtistVisible(false)}/>
 </div>
     </Container>
   )
