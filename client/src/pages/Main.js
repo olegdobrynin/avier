@@ -1,15 +1,24 @@
-import React from 'react'
+import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect } from 'react'
 import {Container} from 'react-bootstrap';
-import LotList from '../components/LotList';
+import { Context } from '..';
+import ArtList from '../components/ArtList';
 import TypeBar from '../components/TypeBar';
+import { fetchArts, fetchTypes } from '../http/artAPI';
 
-const Main = () => {
+const Main = observer( () => {
+    const {art} = useContext(Context)
+
+    useEffect( () => {
+        fetchTypes().then(data => art.setTypes(data))
+        fetchArts().then(data => art.setArts(data.rows))
+    }, [])
     return (
         <Container>
             <TypeBar />
-            <LotList/>
+            <ArtList/>
         </Container>
     );
-};
+});
 
 export default Main;

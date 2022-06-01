@@ -2,8 +2,9 @@ import React, { useContext } from 'react'
 import { Context } from '../index'
 import { ADMIN_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts'
 import {observer} from "mobx-react-lite"
-import {Navbar, Container, Nav} from 'react-bootstrap'
+import {Navbar, Container, Nav, NavDropdown} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { userInfo } from '../http/userAPI'
 
 const NavBar = observer( () => {
     const navigate = useNavigate()
@@ -18,7 +19,7 @@ const NavBar = observer( () => {
   return (
     <Navbar bg="light" variant="light" >
     <Container>
-    <Navbar.Brand href={MAIN_ROUTE}>
+    <Navbar.Brand onClick={() => navigate(MAIN_ROUTE)}>
     <img
         src="/logo330x100.png"
         width="132"
@@ -30,8 +31,16 @@ const NavBar = observer( () => {
 
     {user.isAuth ?
         <Nav className="ml-auto">
-            <Nav.Link onClick={() => navigate(ADMIN_ROUTE)}>Админ панель</Nav.Link>
-            <Nav.Link onClick={() => logOut()}>Выйти</Nav.Link>
+
+            <NavDropdown
+            id="nav-dropdown"
+            title={userInfo().login}
+            menuVariant="white"
+          >
+            <NavDropdown.Item onClick={() => navigate(ADMIN_ROUTE)}>Admin</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={() => logOut()}>Выйти</NavDropdown.Item>
+            </NavDropdown>
         </Nav>
       :
         <Nav className="ml-auto">

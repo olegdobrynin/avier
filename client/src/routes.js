@@ -1,10 +1,10 @@
 import React from 'react'
 import Admin from "./pages/Admin"
 import Auth from "./pages/Auth"
-import LotPage from "./pages/LotPage"
+import ArtPage from "./pages/ArtPage"
 import Main from "./pages/Main"
 import Mark from "./pages/Mark"
-import { MAIN_ROUTE, MARK_ROUTE, ADMIN_ROUTE, LOGIN_ROUTE, LOT_ROUTE, REGISTRATION_ROUTE } from "./utils/consts"
+import { MAIN_ROUTE, MARK_ROUTE, ADMIN_ROUTE, LOGIN_ROUTE, ART_ROUTE, REGISTRATION_ROUTE } from "./utils/consts"
 
 export const authRoutes = [
     {
@@ -31,7 +31,7 @@ export const publicRoutes = [
         element: <Auth />
     },
     {
-        path: LOT_ROUTE + '/:id',
-        element: <LotPage />
+        path: ART_ROUTE + '/:id',
+        element: <ArtPage />
     }
 ]
