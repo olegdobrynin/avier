@@ -2,15 +2,16 @@ import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, Col, Dropdown, Form, Modal, Row } from 'react-bootstrap'
 import { Context } from '../..'
-import { fetchArtists, fetchTypes } from '../../http/artAPI'
+import { createArt, fetchArtists, fetchTypes } from '../../http/artAPI'
 
 export default observer( function CreateArt({show, onHide}) {
   const {art} = useContext(Context)
   const [name, setName] = useState('')
   const [file, setFile] = useState(null)
-  const [info, setInfo] = useState([])
   const [about, setAbout] = useState('')
   const [year, setYear] = useState('')
+  const [city, setCity] = useState('')
+  const [info, setInfo] = useState([])
 
   useEffect( () => {
     fetchTypes().then(data => art.setTypes(data))
@@ -35,7 +36,17 @@ export default observer( function CreateArt({show, onHide}) {
   }
 
   const addArt = () => {
-    console.log(info)
+    const artists = art.selectedArtist.id
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('img', file)
+    formData.append('year', `${year}`)
+    formData.append('typeId', art.selectedType.id)
+    // formData.append('artistId', JSON.stringify(artists))
+    formData.append('about', about)
+    formData.append('city', city)
+    formData.append('info', JSON.stringify(info))
+    createArt(formData).then(data => onHide())
   }
 
   return (
@@ -86,6 +97,20 @@ export default observer( function CreateArt({show, onHide}) {
                   className='mt-3'
                   placeholder='Введите название..'
                 />
+                 <Form.Control
+                        value={about}
+                        onChange={e => setAbout(e.target.value)}
+                        className='mt-3'
+                        as="textarea" 
+                        rows={3}
+                        placeholder='описание'
+                      />
+                      <Form.Control
+                  value={city}
+                  onChange={e => setCity(e.target.value)}
+                  className='mt-3'
+                  placeholder='Город..'
+                />
                 <Form.Control
                   value={year}
                   onChange={e => {
@@ -100,14 +125,7 @@ export default observer( function CreateArt({show, onHide}) {
                   max="2022"
                   maxLength="4"
                 />
-                 <Form.Control
-                        value={about}
-                        onChange={e => setAbout(e.target.value)}
-                        className='mt-3'
-                        as="textarea" 
-                        rows={3}
-                        placeholder='описание'
-                      />
+                
                 <Form.Control
                   className='mt-3'
                   type='file'

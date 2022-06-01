@@ -6,13 +6,13 @@ import { Context } from '../index';
 const TypeBar = observer(() => {
     const {art} = useContext(Context)
   return (
-    <Nav variant="tabs" defaultActiveKey="0">
+    <Nav variant="pills" defaultActiveKey="0" className='mt-2 md-2'>
         <Nav.Item>
          <Nav.Link eventKey='0'>Все</Nav.Link>
         </Nav.Item>
-         { art.types.map(types =>
-        <Nav.Item>
-         <Nav.Link eventKey={types.id} key={types.id} onClick={() => art.setSelectedType(types)}>{types.name}</Nav.Link>
+         { art.types.map(type =>
+        <Nav.Item >
+         <Nav.Link eventKey={type.id} key={type.id} onClick={() => art.setSelectedType(type)}>{type.name}</Nav.Link>
         </Nav.Item>
          )}
   

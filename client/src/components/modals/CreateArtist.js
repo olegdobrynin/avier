@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { Button, Col, Dropdown, Form, Modal, Row } from 'react-bootstrap'
+import { Context } from '../..'
 
 export default function CreateArtist({show, onHide}) {
   return (
