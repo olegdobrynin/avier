@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react'
 import {Container} from 'react-bootstrap';
 import { Context } from '..';
 import ArtList from '../components/ArtList';
+import Pages from '../components/Pages';
 import TypeBar from '../components/TypeBar';
 import { fetchArts, fetchTypes } from '../http/artAPI';
 
@@ -11,12 +12,24 @@ const Main = observer( () => {
 
     useEffect( () => {
         fetchTypes().then(data => art.setTypes(data))
-        fetchArts().then(data => art.setArts(data.rows))
+        fetchArts(null, null, 1, 3).then(data => {
+            art.setArts(data.rows)
+            art.setTotalCount(data.count)
+        })
     }, [])
+
+    useEffect( () => {
+        fetchArts(art.selectedType.id, null, art.page, 3).then(data => {
+            art.setArts(data.rows)
+            art.setTotalCount(data.count)
+        })
+    }, [art.selectedType, null, art.page])
+
     return (
         <Container>
             <TypeBar />
             <ArtList/>
+            <Pages/>
         </Container>
     );
 });
