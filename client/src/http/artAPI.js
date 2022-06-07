@@ -26,13 +26,20 @@ export const deleteArt = async (art) => {
     return data
 }
 
-export const fetchArts = async () => {
-    const {data} = await $host.get('api/art')
+export const fetchArts = async (typeId, artistId, page, limit) => {
+    const {data} = await $host.get('api/art', {params:{
+        typeId, artistId, page, limit
+    }})
     return data
 }
 
 export const fetchArtists = async () => {
     const {data} = await $host.get('api/artist')
+    return data
+}
+
+export const fetchOneArtist = async (id) => {
+    const {data} = await $host.get('api/artist/' + id)
     return data
 }
 
