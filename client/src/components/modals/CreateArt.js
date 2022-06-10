@@ -1,10 +1,13 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, Col, Dropdown, Form, Modal, Row } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { Context } from '../..'
 import { createArt, fetchArtists, fetchTypes } from '../../http/artAPI'
+import { ART_ROUTE } from '../../utils/consts'
 
 export default observer( function CreateArt({show, onHide}) {
+  const navigate = useNavigate();
   const {art} = useContext(Context)
   const [name, setName] = useState('')
   const [file, setFile] = useState(null)
@@ -12,6 +15,7 @@ export default observer( function CreateArt({show, onHide}) {
   const [year, setYear] = useState('')
   const [city, setCity] = useState('')
   const [info, setInfo] = useState([])
+  const [artistId, setArtistId] = useState([])
 
   useEffect( () => {
     fetchTypes().then(data => art.setTypes(data))
@@ -42,13 +46,19 @@ export default observer( function CreateArt({show, onHide}) {
     formData.append('img', file)
     formData.append('year', `${year}`)
     formData.append('typeId', art.selectedType.id)
-    // formData.append('artistId', JSON.stringify(artists))
+    formData.append('artistId', artistId)
     formData.append('about', about)
     formData.append('city', city)
     formData.append('info', JSON.stringify(info))
-    createArt(formData).then(data => onHide())
+    createArt(formData).then(data => {
+       onHide()
+
+       navigate(ART_ROUTE + '/' + data.id)
+      }
+    )
   }
 
+  
   return (
     <Modal
     show={show}
@@ -63,12 +73,17 @@ export default observer( function CreateArt({show, onHide}) {
       </Modal.Header>
       <Modal.Body>
             <Form>
-                <Dropdown className='mt-2 mb-2'>
+              <div className='d-flex flex-row'>
+                <Dropdown className='mt-2 mb-2 me-2'>
                     <Dropdown.Toggle>{art.selectedArtist.name || "художник"}</Dropdown.Toggle>
                     <Dropdown.Menu>
                       {art.artists.map(artist => 
                         <Dropdown.Item 
-                        onClick={() => art.setSelectedArtist(artist)} 
+                        onClick={() => {
+                            art.setSelectedArtist(artist)
+                            setArtistId(artist.id)
+                           }
+                         } 
                         key={artist.id}
                         >
                           {artist.name}
@@ -76,7 +91,13 @@ export default observer( function CreateArt({show, onHide}) {
                         )}
                     </Dropdown.Menu>
                 </Dropdown>
-                
+                <Button
+                  className='mt-2 mb-2'
+                  onClick={() => {}}
+                >
+                  +
+                </Button>
+              </div>
                 <Dropdown className='mt-2 mb-2'>
                     <Dropdown.Toggle>{art.selectedType.name || "тип"}</Dropdown.Toggle>
                     <Dropdown.Menu>
