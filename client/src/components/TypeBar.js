@@ -11,7 +11,7 @@ const TypeBar = observer(() => {
          <Nav.Link eventKey='0' key="0" onClick={() => art.setSelectedType(0)}>Все</Nav.Link>
         </Nav.Item>
          { art.types.map(type =>
-        <Nav.Item >
+        <Nav.Item>
          <Nav.Link eventKey={type.id} key={type.id} onClick={() => art.setSelectedType(type)}>{type.name}</Nav.Link>
         </Nav.Item>
          )}

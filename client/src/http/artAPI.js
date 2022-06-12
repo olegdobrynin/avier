@@ -21,8 +21,8 @@ export const createArt = async (art) => {
     return data
 }
 
-export const deleteArt = async (art) => {
-    const {data} = await $authHost.post('api/art', art)
+export const deleteArt = async (id) => {
+    const {data} = await $authHost.delete('api/art/' + id)
     return data
 }
 
@@ -45,5 +45,12 @@ export const fetchOneArtist = async (id) => {
 
 export const fetchOneArt = async (id) => {
     const {data} = await $host.get('api/art/' + id)
+    return data
+}
+
+export const fetchArtCount = async (typeId, artistId) => {
+    const {data} = await $host.get('api/art/count', {params:{
+        typeId, artistId
+    }})
     return data
 }

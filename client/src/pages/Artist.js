@@ -7,7 +7,7 @@ import { fetchOneArtist } from '../http/artAPI'
 export default observer( function ArtPage() {
     const [artist, setArtist] = useState({})
     const {id} = useParams()
-    const img = process.env.REACT_APP_API_URL + artist.img;
+    const img = process.env.REACT_APP_API_URL + "artists/" + artist.img;
 
     useEffect(() => {
         fetchOneArtist(id).then(data => setArtist(data))
