@@ -10,15 +10,9 @@ import { fetchArts, fetchTypes } from '../http/artAPI';
 const Main = observer( () => {
     const {art} = useContext(Context)
 
-    useEffect( () => {
-        fetchTypes().then(data => art.setTypes(data))
-        fetchArts(null, null, 1, 3).then(data => {
-            art.setArts(data.rows)
-            art.setTotalCount(data.count)
-        })
-    }, [])
 
     useEffect( () => {
+        fetchTypes().then(data => art.setTypes(data))
         fetchArts(art.selectedType.id, null, art.page, 3).then(data => {
             art.setArts(data.rows)
             art.setTotalCount(data.count)
