@@ -10,7 +10,8 @@ const NavBar = observer( () => {
     const navigate = useNavigate()
     const {user} = useContext(Context)
     const {art} = useContext(Context)
-
+    art.setSelectedType(0)
+    
     const logOut = () => {
       user.setUser({})
       user.setIsAuth(false)
