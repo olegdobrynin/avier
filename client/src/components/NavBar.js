@@ -9,17 +9,24 @@ import { userInfo } from '../http/userAPI'
 const NavBar = observer( () => {
     const navigate = useNavigate()
     const {user} = useContext(Context)
-
+    const {art} = useContext(Context)
+    art.setSelectedType(0)
+    
     const logOut = () => {
       user.setUser({})
       user.setIsAuth(false)
       localStorage.setItem('token', '')
     }
 
+    const logo = () => {
+      art.setSelectedType(0)
+      navigate(MAIN_ROUTE)
+    }
+
   return (
     <Navbar bg="light" variant="light" >
     <Container>
-    <Navbar.Brand onClick={() => navigate(MAIN_ROUTE)}>
+    <Navbar.Brand onClick={() => logo() }>
     <img
         src="/logo330x100.png"
         width="132"

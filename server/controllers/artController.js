@@ -1,36 +1,36 @@
 const uuid = require('uuid')
 const path = require('path')
-const {Art, ArtInfo, ArtArtist} = require('../models/models')
+const {Art, ArtInfo, Artist, ArtArtist} = require('../models/models')
 const ApiError = require('../error/ApiError')
 
 class ArtController {
 
     async create(req, res, next) {
         try {
-            let {name, about, city, year, typeId, artistId, info} = req.body
+            let {name, about, city, year, typeId, artistId = '', info = '[]'} = req.body
             const {img} = req.files
             let fileName = uuid.v4() + ".jpg"
             img.mv(path.resolve(__dirname, '..', 'static', fileName))
             const art = await Art.create({name, about, city, year, typeId, img: fileName})
 
-            if(info){
-                info = JSON.parse(info)
-                info.forEach(i =>
-                    ArtInfo.create({
-                        title: i.title,
-                        descriptoin: i.descriptoin,
-                        artId: art.id
-                    }))
-            }
 
-            // if(artistId){
-            //     artistId = JSON.parse(artistId)
-            //     artistId.forEach(i =>
-            //         ArtArtist.create({
-            //             artistId: i.artistId,
-            //             artId: art.id
-            //         }))
-            //     }
+                info = JSON.parse(info)
+                info.forEach(({title, description}) =>
+                    ArtInfo.create({
+                        artId: art.id,
+                        title,
+                        description
+                    }))
+
+
+                const artistIds = artistId.split(',')
+                artistIds.forEach( ( artistId ) =>
+                    ArtArtist.create({
+                        artId: art.id,
+                        artistId: Number(artistId),
+                    })
+                    )
+
 
            
             return res.json(art)
@@ -70,15 +70,19 @@ class ArtController {
         const art = await Art.findOne(
             {
                 where: {id},
-                include: [{model: ArtInfo, as: 'info'}],
-                // include: [{model: ArtArtist, as: 'artist'}]
+                include: [{model: ArtInfo, as: 'info'}, {model: Artist, as: 'artist'}],
             }
         )
         return res.json(art)
     }
     
     async delete(req, res) {
-
+        const {id} = req.query
+        console.log(id)
+        await Art.destroy({ where: {id} })
+        await ArtInfo.destroy({ where: { artId: {id} } })
+        ArtArtist.destroy({ where: { artId: {id} } })
+        return res.json(id);
     }
 
 }

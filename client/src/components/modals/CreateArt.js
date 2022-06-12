@@ -1,17 +1,21 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, Col, Dropdown, Form, Modal, Row } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { Context } from '../..'
 import { createArt, fetchArtists, fetchTypes } from '../../http/artAPI'
+import { ART_ROUTE } from '../../utils/consts'
 
 export default observer( function CreateArt({show, onHide}) {
+  const navigate = useNavigate();
   const {art} = useContext(Context)
   const [name, setName] = useState('')
   const [file, setFile] = useState(null)
   const [about, setAbout] = useState('')
   const [year, setYear] = useState('')
   const [city, setCity] = useState('')
-  const [info, setInfo] = useState([])
+  const [property, setProperty] = useState([])
+  const [artistId, setArtistId] = useState([])
 
   useEffect( () => {
     fetchTypes().then(data => art.setTypes(data))
@@ -19,16 +23,16 @@ export default observer( function CreateArt({show, onHide}) {
 }, [])
 
 
-  const addInfo = () => {
-    setInfo([...info, {title: '', description: '', number: Date.now()}])
+  const addProperty = () => {
+    setProperty([...property, {title: '', description: '', number: Date.now()}])
   }
 
-  const removeInfo = (number) => {
-    setInfo(info.filter(i => i.number !== number))
+  const removeProperty = (number) => {
+    setProperty(property.filter(i => i.number !== number))
   }
 
-  const changeInfo = (key, value, number) => {
-    setInfo(info.map(i => i.number === number ? {...i, [key]: value} : i))
+  const changeProperty = (key, value, number) => {
+    setProperty(property.map(i => i.number === number ? {...i, [key]: value} : i))
   }
 
   const selectFile = e => {
@@ -36,19 +40,23 @@ export default observer( function CreateArt({show, onHide}) {
   }
 
   const addArt = () => {
-    const artists = art.selectedArtist.id
     const formData = new FormData()
     formData.append('name', name)
     formData.append('img', file)
     formData.append('year', `${year}`)
     formData.append('typeId', art.selectedType.id)
-    // formData.append('artistId', JSON.stringify(artists))
+    formData.append('artistId', JSON.stringify([artistId]))
     formData.append('about', about)
     formData.append('city', city)
-    formData.append('info', JSON.stringify(info))
-    createArt(formData).then(data => onHide())
+    formData.append('property', JSON.stringify(property))
+    createArt(formData).then(data => {
+       onHide()
+       navigate(ART_ROUTE + '/' + data.id)
+      }
+    )
   }
 
+  
   return (
     <Modal
     show={show}
@@ -63,12 +71,17 @@ export default observer( function CreateArt({show, onHide}) {
       </Modal.Header>
       <Modal.Body>
             <Form>
-                <Dropdown className='mt-2 mb-2'>
+              <div className='d-flex flex-row'>
+                <Dropdown className='mt-2 mb-2 me-2'>
                     <Dropdown.Toggle>{art.selectedArtist.name || "художник"}</Dropdown.Toggle>
                     <Dropdown.Menu>
                       {art.artists.map(artist => 
                         <Dropdown.Item 
-                        onClick={() => art.setSelectedArtist(artist)} 
+                        onClick={() => {
+                            art.setSelectedArtist(artist)
+                            setArtistId(artist.id)
+                           }
+                         } 
                         key={artist.id}
                         >
                           {artist.name}
@@ -76,7 +89,13 @@ export default observer( function CreateArt({show, onHide}) {
                         )}
                     </Dropdown.Menu>
                 </Dropdown>
-                
+                <Button
+                  className='mt-2 mb-2'
+                  onClick={() => {}}
+                >
+                  +
+                </Button>
+              </div>
                 <Dropdown className='mt-2 mb-2'>
                     <Dropdown.Toggle>{art.selectedType.name || "тип"}</Dropdown.Toggle>
                     <Dropdown.Menu>
@@ -134,26 +153,26 @@ export default observer( function CreateArt({show, onHide}) {
                 
                 <hr/>
                 
-                {info.map(i =>
+                {property.map(i =>
                   <Row className='mt-3' key={i.number}>
                     <Col md={4}>
                       <Form.Control
                         value={i.title}
-                        onChange={(e) => changeInfo('title', e.target.value, i.number)}
+                        onChange={(e) => changeProperty('title', e.target.value, i.number)}
                         placeholder='название свойства'
                       />
                     </Col>
                     <Col md={4}>
                       <Form.Control
                         value={i.description}
-                        onChange={(e) => changeInfo('description', e.target.value, i.number)}
+                        onChange={(e) => changeProperty('description', e.target.value, i.number)}
                         placeholder='описание'
                       />
                     </Col>
                     <Col md={4}>
                       <Button 
                         variant={"outline-danger"}
-                        onClick={() => removeInfo(i.number)}
+                        onClick={() => removeProperty(i.number)}
                       >
                         Удалить
                       </Button>
@@ -163,7 +182,7 @@ export default observer( function CreateArt({show, onHide}) {
                   <Button
                   className='mt-3'
                   variant={'outline-dark'}
-                  onClick={addInfo}
+                  onClick={addProperty}
                 >
                   Добавить свойство
                 </Button>
