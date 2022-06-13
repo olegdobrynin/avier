@@ -5,20 +5,19 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { fetchOneArt } from '../http/artAPI'
 import { ARTIST_ROUTE } from '../utils/consts'
 import DeleteArt from '../components/modals/DeleteArt'
-import EditArt from '../components/modals/EditArt'
+// import EditArt from '../components/modals/EditArt'
 
 export default observer( function ArtPage() {
     const navigate = useNavigate()
     const [art, setArt] = useState( {properties: [], artists: []} )
     const {id} = useParams()
     const [deleteVisible, setDeleteVisible] = useState(false)
-    const [editVisible, setEditVisible] = useState(false)
+    // const [editVisible, setEditVisible] = useState(false)
 
 
      useEffect(() => {
          fetchOneArt(id).then(data => {
              setArt(data)
-             console.log(data)
          })
     }, [])
     
