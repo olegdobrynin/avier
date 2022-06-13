@@ -14,6 +14,7 @@ export default observer( function App() {
 
   useEffect( () => {
     check().then(data => {
+      user.setUserInfo(data)
       user.setUser(true)
       user.setIsAuth(true)
     }).finally(() => setLoading(false))
