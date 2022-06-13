@@ -19,6 +19,7 @@ export const check = async () => {
     return jwt_decode(data.token)
 }
 
-export const userInfo = () => {
-    return jwt_decode(localStorage.getItem('token'))
+export const fetchInfo = async (id) => {
+    const {data} = await $authHost.get('api/user/info/' + id)
+    return data
 }
