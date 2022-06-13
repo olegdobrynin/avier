@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react-lite'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { Context } from '../..'
 import { createArtist } from '../../http/artistAPI'
-import { userInfo } from '../../http/userAPI'
 import { ARTIST_ROUTE } from '../../utils/consts'
 
 export default observer( function CreateArt({show, onHide}) {
@@ -11,7 +11,8 @@ export default observer( function CreateArt({show, onHide}) {
   const [name, setName] = useState('')
   const [file, setFile] = useState(null)
   const [bio, setBio] = useState('')
-  const userId = userInfo().id
+  const {user} = useContext(Context)
+  const userId = user.userInfo.id
 
   const selectFile = e => {
     setFile(e.target.files[0])
@@ -30,7 +31,6 @@ export default observer( function CreateArt({show, onHide}) {
     )
   }
 
-  
   return (
     <Modal
     show={show}
@@ -45,7 +45,6 @@ export default observer( function CreateArt({show, onHide}) {
       </Modal.Header>
       <Modal.Body>
             <Form>
-
                 <Form.Control
                   value={name}
                   onChange={e => setName(e.target.value)}
@@ -66,8 +65,7 @@ export default observer( function CreateArt({show, onHide}) {
                   type='file'
                   onChange={selectFile}
                 />
-                
-               
+
             </Form>
       </Modal.Body>
       <Modal.Footer>
