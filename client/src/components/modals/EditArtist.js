@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Context } from '../..'
 import { fetchOneArtist, updateArtist } from '../../http/artistAPI'
-import { userInfo } from '../../http/userAPI'
 import { ARTIST_ROUTE } from '../../utils/consts'
 
 export default observer( function EditArt({show, onHide}) {
@@ -11,7 +11,8 @@ export default observer( function EditArt({show, onHide}) {
   const [name, setName] = useState('')
   const [file, setFile] = useState(null)
   const [bio, setBio] = useState('')
-  const userId = userInfo().id
+  const {user} = useContext(Context)
+  const userId = user.userInfo.id
   const {id} = useParams()
 
   useEffect(() => {
