@@ -4,7 +4,6 @@ import { ADMIN_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, REGISTRATION_ROUTE } from '../uti
 import {observer} from "mobx-react-lite"
 import {Navbar, Container, Nav, NavDropdown} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { userInfo } from '../http/userAPI'
 
 const NavBar = observer( () => {
     const navigate = useNavigate()
@@ -41,7 +40,7 @@ const NavBar = observer( () => {
 
             <NavDropdown
             id="nav-dropdown"
-            title={userInfo().login}
+            title={user.userInfo.login}
             menuVariant="white"
           >
             <NavDropdown.Item onClick={() => navigate(ADMIN_ROUTE)}>Admin</NavDropdown.Item>
