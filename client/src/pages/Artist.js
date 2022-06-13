@@ -26,7 +26,8 @@ export default observer( function ArtPage() {
             <Col md={4}>
                 <Row><h2>{artist.name}</h2></Row>    
                 <Row><h6>{artist.bio}</h6></Row>
-                <Button
+                <Row>
+                    <Button
                         className='mt-2 mb-2'
                         variant="outline-danger" 
                         onClick={() => setDeleteVisible(true)}
@@ -40,9 +41,11 @@ export default observer( function ArtPage() {
                         >
                         Редактировать
                     </Button>
+                </Row>
+                
             </Col>
         </Row>
-        {/* <DeleteArtist show={deleteVisible} onHide={() => setDeleteVisible(false)}/> */}
+        <DeleteArtist show={deleteVisible} onHide={() => setDeleteVisible(false)}/>
         <EditArtist show={editVisible} onHide={() => setEditVisible(false)}/>
     </Container>
   )
