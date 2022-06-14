@@ -19,3 +19,8 @@ export const fetchOneArtist = async (id) => {
     const {data} = await $host.get('api/artist/' + id)
     return data
 }
+
+export const updateArtist = async (id, art) => {
+    const {data} = await $authHost.patch('api/artist/' + id, art)
+    return data
+}

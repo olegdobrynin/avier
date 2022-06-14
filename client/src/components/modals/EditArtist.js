@@ -1,18 +1,27 @@
 import { observer } from 'mobx-react-lite'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Context } from '../..'
-import { createArtist } from '../../http/artistAPI'
+import { fetchOneArtist, updateArtist } from '../../http/artistAPI'
 import { ARTIST_ROUTE } from '../../utils/consts'
 
-export default observer( function CreateArt({show, onHide}) {
+export default observer( function EditArt({show, onHide}) {
   const navigate = useNavigate();
   const [name, setName] = useState('')
   const [file, setFile] = useState(null)
   const [bio, setBio] = useState('')
   const {user} = useContext(Context)
   const userId = user.userInfo.id
+  const {id} = useParams()
+
+  useEffect(() => {
+    fetchOneArtist(id).then(data => { 
+        setName(data.name)
+        setBio(data.bio)
+        setFile(data.img)
+    } )
+}, [])
 
   const selectFile = e => {
     setFile(e.target.files[0])
@@ -24,9 +33,9 @@ export default observer( function CreateArt({show, onHide}) {
     formData.append('img', file)
     formData.append('bio', bio)
     formData.append('userId', userId)   
-    createArtist(formData).then(data => {
+    updateArtist(id, formData).then(data => {
        onHide()
-       navigate(ARTIST_ROUTE + '/' + data.id)
+       navigate(ARTIST_ROUTE + '/' + id)
       }
     )
   }
@@ -40,7 +49,7 @@ export default observer( function CreateArt({show, onHide}) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Добавить художника
+          Изменить художника
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -59,7 +68,7 @@ export default observer( function CreateArt({show, onHide}) {
                         rows={3}
                         placeholder='Биография'
                       />
-                                     
+                                    
                 <Form.Control
                   className='mt-3'
                   type='file'

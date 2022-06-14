@@ -24,6 +24,7 @@ export default observer( function Auth() {
             }
             user.setUser(user)
             user.setIsAuth(true)
+            user.setUserInfo(data)
             navigate(MAIN_ROUTE)
         } catch (e) {
             alert(e.response.data.message)
