@@ -1,0 +1,3 @@
+[submodule "react-client"]
+	path = react-client
+	url = https://github.com/olegdobrynin/avier-react.git
